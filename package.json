@@ -1,0 +1,56 @@
+{
+  "name": "leetcode-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint-staged": "lint-staged",
+    "eslint": "eslint --ext .vue,.js,.jsx,.ts,.tsx ./ --max-warnings 0",
+    "eslint:fix": "eslint --ext .vue,.js,jsx,.ts,.tsx ./ --max-warnings 0 --fix",
+    "prettier": "prettier --write . !**/package.json",
+    "prepare": "node -e \"if(require('fs').existsSync('.git')){process.exit(1)}\" || is-ci || husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.md": [
+      "prettier --write"
+    ],
+    "{*.json,*.code-snippets,.!(browserslist)*rc}": [
+      "prettier --write--parser json"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "keywords": [
+    "leetcode",
+    "typescript"
+  ],
+  "author": "Junjie Yado",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@typescript-eslint/eslint-plugin": "^7.10.0",
+    "@typescript-eslint/parser": "^7.10.0",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-alloy": "^5.1.2",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "husky": "~9.0.11",
+    "lint-staged": "^15.2.5",
+    "prettier": "^3.2.5",
+    "prettier-plugin-packagejson": "^2.5.0"
+  },
+  "engines": {
+    "node": ">=18.12.0",
+    "pnpm": ">=9.3.0"
+  }
+}

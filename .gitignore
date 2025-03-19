@@ -1,0 +1,46 @@
+# Bundle
+dist
+coverage
+test-report.html
+
+# Package Manager
+node_modules
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+.local
+# local env files
+.env.local
+.env.*.local
+.eslintcache
+.stylelintcache
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+debug.log*
+
+# Editor directories and files
+.idea
+# .vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Auto imports
+auto-imports.d.ts
+components.d.ts
+
+# Other files
+.DS_Store
+.cache
+.turbo
+.history
+_site
+tests/server/static
+tests/server/static/upload

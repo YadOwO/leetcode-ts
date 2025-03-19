@@ -1,0 +1,16 @@
+node_modules
+dist
+
+.DS_Store
+.npmrc
+.idea
+.editorconfig
+.local
+
+*-lock.json
+*-lock.yaml
+*.log
+*.md
+*.svg
+*.png
+*.ico

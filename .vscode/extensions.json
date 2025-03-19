@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "vue.volar",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "mrmlnc.vscode-less",
+    "lokalise.i18n-ally",
+    "mikestead.dotenv"
+  ],
+  "unwantedRecommendations": ["octref.vetur", "crazyurus.miniprogram-vscode-extension"]
+}

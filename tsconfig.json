@@ -1,0 +1,71 @@
+/* Visit https://aka.ms/tsconfig to read more about this file */
+{
+  "compilerOptions": {
+    /* Projects */
+    //  ...
+
+    /* Editor Support */
+    "plugins": [
+      // ! 会导致 `ts` 无法识别 `vue` 文件后缀, 可待官方修复后再启用。详见：https://github.com/mrmckeb/typescript-plugin-css-modules/issues/272
+      // CSS Moudule 类型提示
+      // { "name": "typescript-plugin-css-modules" }
+    ],
+
+    /* Language and Environment */
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "jsx": "preserve",
+
+    /* Modules */
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    // "types": ["vite/client", "jest"],
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+
+    /* JavaScript Support */
+    "allowJs": true,
+
+    /* Emit */
+    "noEmit": true,
+    "sourceMap": true,
+    "removeComments": true,
+
+    /* Interop Constraints */
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictFunctionTypes": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": [
+    "components.d.ts",
+    "auto-imports.d.ts",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+    "mock/**/*.ts",
+    "tests/*.spec.ts",
+    "vite.config.*"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"],
+
+  "compileOnSave": false
+}
