@@ -19,7 +19,7 @@ function deleteAndEarn(nums: number[]): number {
   }
 
   /** 对 key 排序后的数组 */
-  const uniqueNums = Array.from(points.keys()).sort((a, b) => a - b);
+  const uniqueNums = Array.from(points.keys()).sort((a, b) => a - b); // 标准比较排序时间复杂度 O(m log m)
 
   let prev = 0; // dp[i - 2]
   let curr = 0; // dp[i - 1]
@@ -62,9 +62,7 @@ function deleteAndEarn2(nums: number[]): number {
   let curr = 0;
 
   for (let i = 0; i <= maxVal; i++) {
-    const temp = curr;
-    curr = Math.max(curr, prev + points[i]);
-    prev = temp;
+    [prev, curr] = [curr, Math.max(curr, prev + points[i])];
   }
 
   return curr;
