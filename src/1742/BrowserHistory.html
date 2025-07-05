@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>浏览器历史演示 - Vue3纯净版</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        padding: 40px;
+      }
+
+      .container {
+        max-width: 600px;
+        height: 800px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .history-list {
+        padding: 0;
+        list-style: none;
+        margin: 0 0 20px 0;
+      }
+
+      .history-list li {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .current {
+        color: red;
+        font-weight: bold;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      input {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        padding: 6px 12px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 0 8px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="./BrowserHistory.ts"></script>
+    <div id="app"></div>
+
+    <script>
+      const { createApp, ref } = Vue;
+
+      const App = {
+        setup() {
+          const history = ref([]);
+          const currentIndex = ref(0);
+          const newUrl = ref('');
+          const steps = ref(1);
+
+          const visit = () => {
+            if (!newUrl.value.trim()) return;
+            history.value.splice(currentIndex.value + 1);
+            history.value.push(newUrl.value.trim());
+            currentIndex.value = history.value.length - 1;
+            newUrl.value = '';
+          };
+
+          const back = () => {
+            currentIndex.value = Math.max(0, currentIndex.value - Number(steps.value));
+          };
+
+          const forward = () => {
+            currentIndex.value = Math.min(history.value.length - 1, currentIndex.value + Number(steps.value));
+          };
+
+          return { history, currentIndex, newUrl, steps, visit, back, forward };
+        },
+        template: `
+        <div class="container">
+          <h2>📜 浏览器历史演示</h2>
+          <div class="form-group">
+            <input v-model="newUrl" placeholder="输入新网址" />
+            <button @click="visit">访问</button>
+          </div>
+
+          <div class="form-group">
+            <button @click="back">后退</button>
+            <input v-model="steps" type="number" min="1" style="width: 50px;" />
+            <button @click="forward">前进</button>
+          </div>
+
+          <ul class="history-list" v-if="history.length > 0">
+            <li v-for="(url, index) in history" :key="index"
+                :class="{ current: index === currentIndex }">
+              {{ url }} {{ index === currentIndex ? '(当前)' : '' }}
+            </li>
+          </ul>
+        </div>
+      `,
+      };
+
+      createApp(App).mount('#app');
+    </script>
+  </body>
+</html>
