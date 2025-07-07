@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>二维 DP 动态演示 - 不同路径</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f9f9f9;
+      }
+      table {
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      td {
+        border: 1px solid #ccc;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        background-color: #fff;
+        font-weight: bold;
+      }
+      td.calculated {
+        background-color: #c8e6c9;
+      }
+      .controls {
+        margin-top: 20px;
+      }
+      .formula {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      const { createApp, ref } = Vue;
+
+      const App = {
+        setup() {
+          const m = ref(3);
+          const n = ref(4);
+          const dp = ref([]);
+          const currentStep = ref(0);
+          const formula = ref('');
+          const totalSteps = ref(0);
+
+          const initDP = () => {
+            dp.value = Array.from({ length: m.value }, () => Array(n.value).fill(0));
+            for (let i = 0; i < m.value; i++) dp.value[i][0] = 1;
+            for (let j = 0; j < n.value; j++) dp.value[0][j] = 1;
+            currentStep.value = 0;
+            formula.value = '';
+            totalSteps.value = (m.value - 1) * (n.value - 1);
+          };
+
+          const nextStep = () => {
+            if (currentStep.value >= totalSteps.value) return;
+            const step = currentStep.value;
+            const i = Math.floor(step / (n.value - 1)) + 1;
+            const j = (step % (n.value - 1)) + 1;
+
+            const left = dp.value[i][j - 1];
+            const top = dp.value[i - 1][j];
+            const sum = left + top;
+            dp.value[i][j] = sum;
+            formula.value = `dp[${i}][${j}] = dp[${i - 1}][${j}] + dp[${i}][${j - 1}] = ${top} + ${left} = ${sum}`;
+            currentStep.value++;
+          };
+
+          const reset = () => {
+            initDP();
+          };
+
+          initDP();
+
+          return {
+            m,
+            n,
+            dp,
+            currentStep,
+            totalSteps,
+            formula,
+            nextStep,
+            reset,
+          };
+        },
+        template: `
+        <div>
+          <h2>📐 不同路径 - 二维 DP 动态演示</h2>
+          <div>
+            行数 m：<input type="number" v-model.number="m" min="2" style="width:60px;">
+            列数 n：<input type="number" v-model.number="n" min="2" style="width:60px;">
+            <button @click="reset">重置表格</button>
+          </div>
+
+          <table>
+            <tr v-for="(row, i) in dp" :key="i">
+              <td v-for="(val, j) in row" :key="j"
+                  :class="{ calculated: i > 0 && j > 0 && dp[i][j] !== 0 }">
+                {{ val }}
+              </td>
+            </tr>
+          </table>
+
+          <div class="controls">
+            <button @click="nextStep" :disabled="currentStep >= totalSteps">
+              下一步计算
+            </button>
+          </div>
+
+          <div class="formula" v-if="formula">
+            当前计算：{{ formula }}
+          </div>
+        </div>
+      `,
+      };
+
+      createApp(App).mount('#app');
+    </script>
+  </body>
+</html>

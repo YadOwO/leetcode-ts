@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>一维 DP 滚动效果版 - 不同路径</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f9f9f9;
+      }
+      .dp-row {
+        display: flex;
+        margin-bottom: 5px;
+        transition: opacity 0.5s;
+      }
+      .dp-item {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        background-color: #f0f0f0;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 5px;
+        opacity: 0.6;
+        transition:
+          background-color 0.3s,
+          opacity 0.3s,
+          transform 0.3s;
+      }
+      .dp-row.current .dp-item {
+        background-color: #d0f0d0;
+        opacity: 1;
+      }
+      .dp-item.active {
+        background-color: #4caf50;
+        color: #fff;
+        border: 2px solid #2e7d32;
+      }
+      .copied {
+        animation: fadeIn 0.5s ease-in;
+      }
+      @keyframes fadeIn {
+        from {
+          transform: translateY(-10px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      .controls {
+        margin-top: 20px;
+      }
+      .formula {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      const { createApp, ref } = Vue;
+
+      const App = {
+        setup() {
+          const m = ref(3);
+          const n = ref(4);
+          const dpRows = ref([]);
+          const currentRow = ref(0);
+          const col = ref(1);
+          const formula = ref('');
+          const finished = ref(false);
+          const copiedRowIndex = ref(-1); // 用于动效
+
+          const initDP = () => {
+            dpRows.value = [];
+            for (let i = 0; i < m.value; i++) {
+              const row = Array(n.value).fill(1);
+              if (i === 0) {
+                dpRows.value.push(row); // 第一行全1
+              } else {
+                dpRows.value.push(Array(n.value).fill(1)); // 先填1，计算后覆盖
+              }
+            }
+            currentRow.value = 1;
+            col.value = 1;
+            formula.value = '';
+            finished.value = false;
+            copiedRowIndex.value = -1;
+          };
+
+          const nextStep = () => {
+            if (finished.value) return;
+
+            const prev = dpRows.value[currentRow.value][col.value - 1];
+            const curr = dpRows.value[currentRow.value - 1][col.value];
+            const sum = prev + curr;
+            dpRows.value[currentRow.value][col.value] = sum;
+
+            formula.value = `dp[${currentRow.value}][${col.value}] = dp[${currentRow.value - 1}][${col.value}] + dp[${currentRow.value}][${col.value - 1}] = ${curr} + ${prev} = ${sum}`;
+
+            col.value++;
+
+            if (col.value >= n.value) {
+              // 当前行计算结束，把当前行“复制”到下一行
+              col.value = 1;
+              copiedRowIndex.value = currentRow.value + 1;
+              if (currentRow.value + 1 < m.value) {
+                dpRows.value[currentRow.value + 1] = [...dpRows.value[currentRow.value]];
+              }
+              currentRow.value++;
+            }
+
+            if (currentRow.value >= m.value) {
+              finished.value = true;
+              formula.value = '计算完成！';
+            }
+          };
+
+          const reset = () => {
+            initDP();
+          };
+
+          initDP();
+
+          return {
+            m,
+            n,
+            dpRows,
+            currentRow,
+            col,
+            formula,
+            nextStep,
+            reset,
+            finished,
+            copiedRowIndex,
+          };
+        },
+        template: `
+        <div>
+          <h2>📐 不同路径 - 一维 DP 滚动效果版</h2>
+          <div>
+            行数 m：<input type="number" v-model.number="m" min="2" style="width:60px;">
+            列数 n：<input type="number" v-model.number="n" min="2" style="width:60px;">
+            <button @click="reset">重置</button>
+          </div>
+
+          <div class="dp-rows" style="margin-top:20px;">
+            <div
+              v-for="(row, rowIndex) in dpRows"
+              :key="rowIndex"
+              class="dp-row"
+              :class="{ current: rowIndex === currentRow, copied: rowIndex === copiedRowIndex }"
+            >
+              <div
+                v-for="(val, colIndex) in row"
+                :key="colIndex"
+                class="dp-item"
+                :class="{ active: rowIndex === currentRow && colIndex === col }"
+              >
+                {{ val }}
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button @click="nextStep" :disabled="finished">
+              下一步计算
+            </button>
+          </div>
+
+          <div class="formula" v-if="formula">
+            当前计算：{{ formula }}
+          </div>
+        </div>
+      `,
+      };
+
+      createApp(App).mount('#app');
+    </script>
+  </body>
+</html>
